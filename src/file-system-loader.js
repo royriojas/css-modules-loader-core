@@ -28,7 +28,7 @@ export default class FileSystemLoader {
     this.tokensByFile = {};
   }
 
-  fetch( _newPath, relativeTo, _trace ) {
+  fetch( _newPath, relativeTo, _trace, _source ) {
     let newPath = _newPath.replace( /^["']|["']$/g, "" ),
       trace = _trace || String.fromCharCode( this.importNr++ )
     return new Promise( ( resolve, reject ) => {
@@ -47,8 +47,21 @@ export default class FileSystemLoader {
       const tokens = this.tokensByFile[fileRelativePath]
       if (tokens) { return resolve(tokens) }
 
-      fs.readFile( fileRelativePath, "utf-8", ( err, source ) => {
-        if ( err ) reject( err )
+      var readFile = function (path, cb) {
+        if (_source) {
+          cb && cb( _source );
+          return;
+        }
+        fs.readFile( path, "utf-8", ( err, source ) => {
+          if ( err ) {
+            reject( err )
+            return;
+          }
+          cb && cb(source);
+        });
+      };
+
+      readFile( fileRelativePath, ( source ) => {
         this.core.load( source, rootRelativePath, trace, this.fetch.bind( this ) )
           .then( ( { injectableSource, exportTokens } ) => {
             this.sources[trace] = injectableSource
