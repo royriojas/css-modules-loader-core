@@ -7,10 +7,10 @@
     "test": "test"
   },
   "dependencies": {
-    "postcss": "^4.1.11",
-    "postcss-modules-extract-imports": "^0.0.5",
-    "postcss-modules-local-by-default": "^0.0.9",
-    "postcss-modules-scope": "^0.0.8"
+    "postcss": "^8.2.13",
+    "postcss-modules-extract-imports": "^3.0.0",
+    "postcss-modules-local-by-default": "^4.0.0",
+    "postcss-modules-scope": "^3.0.0"
   },
   "devDependencies": {
     "babel": "^5.5.4",
